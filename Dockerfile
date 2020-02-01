@@ -1,40 +1,56 @@
-FROM debian:stretch-slim
+FROM debian:buster-slim
+
+# Started from official Mopidy3 install for Debian/Ubuntu ..
+# (see https://docs.mopidy.com/en/latest/installation/debian/ )
+# but failed ... because apt repo was not (yet) up to date and 
+# therefore switched over to PyPi installation.
+# (see https://docs.mopidy.com/en/latest/installation/pypi/).
+#
+#
+# Hint: Mopidy-Iris # Fails with at startup with 
+#       'Failed to load extension iris: No module named 'handlers' [7:MainThread:mopidy.ext]'
+#       therfore it was not installed.
 
 RUN set -ex \
-    # Official Mopidy install for Debian/Ubuntu along with some extensions
-    # (see https://docs.mopidy.com/en/latest/installation/debian/ )
  && apt-get update \
+ && apt-get upgrade -y \
  && DEBIAN_FRONTEND=noninteractive apt-get install -y \
-        curl \
+        wget \
+        gnupg2 \
         dumb-init \
-        gcc \
-        gnupg \
-        gstreamer1.0-alsa \
+        python3 \
+        python3-pip \
+        python3-dev \
+        python3-crypto \
+        build-essential \
+        python3-gst-1.0 \
+        libgstreamer1.0-0 \
+        gir1.2-gstreamer-1.0 \
+        gir1.2-gst-plugins-base-1.0 \
+        gstreamer1.0-plugins-good \
+        gstreamer1.0-plugins-ugly \
         gstreamer1.0-plugins-bad \
-        python-crypto \
- && curl -L https://apt.mopidy.com/mopidy.gpg | apt-key add - \
- && curl -L https://apt.mopidy.com/mopidy.list -o /etc/apt/sources.list.d/mopidy.list \
+        gstreamer1.0-tools \
+        gstreamer1.0-alsa \
+ && wget -q -O - https://apt.mopidy.com/mopidy.gpg | apt-key add - \
+ && wget -q -O /etc/apt/sources.list.d/mopidy.list https://apt.mopidy.com/buster.list \
  && apt-get update \
- && DEBIAN_FRONTEND=noninteractive apt-get install -y \
-        mopidy \
-        mopidy-soundcloud \
-        mopidy-spotify \
- && curl -L https://bootstrap.pypa.io/get-pip.py | python - \
- && pip install -U six pyasn1 requests[security] cryptography \
- && pip install \
-        Mopidy-Iris \
-        Mopidy-Moped \
-        Mopidy-GMusic \
-        Mopidy-Pandora \
-        Mopidy-YouTube \
-        pyopenssl \
-        youtube-dl \
+ && DEBIAN_FRONTEND=noninteractive apt-get install -y libasound2-dev libspotify-dev \
+ && python3 -m pip install --upgrade mopidy \
+        Mopidy-Local \
+        Mopidy-Mobile \
+        Mopidy-Party \
+        Mopidy-MPD \
+        Mopidy-ALSAMixer \
+        Mopidy-MusicBox-Webclient \
  && mkdir -p /var/lib/mopidy/.config \
  && ln -s /config /var/lib/mopidy/.config/mopidy \
     # Clean-up
  && apt-get purge --auto-remove -y \
         curl \
         gcc \
+        wget \
+        build-essential \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* ~/.cache
 
@@ -50,7 +66,9 @@ COPY pulse-client.conf /etc/pulse/client.conf
 # Allows any user to run mopidy, but runs by default as a randomly generated UID/GID.
 ENV HOME=/var/lib/mopidy
 RUN set -ex \
- && usermod -G audio,sudo mopidy \
+ && useradd -mUs /bin/bash mopidy \
+ && usermod -G audio mopidy \
+ && groups mopidy \
  && chown mopidy:audio -R $HOME /entrypoint.sh \
  && chmod go+rwx -R $HOME /entrypoint.sh
 

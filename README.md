@@ -1,24 +1,40 @@
-[![](https://images.microbadger.com/badges/image/wernight/mopidy.svg)](http://microbadger.com/images/wernight/mopidy "Get your own image badge on microbadger.com")
+# mopidy3-docker
+
+![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/m4rc77/mopidy3-docker) 
+![Docker Cloud Automated build](https://img.shields.io/docker/cloud/automated/m4rc77/mopidy3-docker) 
+![Docker Pulls](https://img.shields.io/docker/pulls/m4rc77/mopidy3-docker)
+![Docker Stars](https://img.shields.io/docker/stars/m4rc77/mopidy3-docker)
+
+Dockerfile to run mopidy3 server with a minimal set of extensions installed
+
+Note: This repo was forked from https://github.com/wernight/docker-mopidy
 
 What is Mopidy?
 ===============
 
-[**Mopidy**](https://www.mopidy.com/) is a music server with support for [MPD clients](https://docs.mopidy.com/en/latest/clients/mpd/) and [HTTP clients](https://docs.mopidy.com/en/latest/ext/web/#ext-web).
+[**Mopidy**](https://www.mopidy.com/) is a music server with support for [MPD clients](https://docs.mopidy.com/en/latest/clients/#mpd-clients) and [Web clients](https://docs.mopidy.com/en/latest/clients/#web-clients).
 
 Features of this image
 ----------------------
 
-  * Follows [official installation](https://docs.mopidy.com/en/latest/installation/debian/) on top of [Debian](https://registry.hub.docker.com/_/debian/).
-  * With backend extensions for:
-      * [Mopidy-Spotify](https://docs.mopidy.com/en/latest/ext/backends/#mopidy-spotify) for **[Spotify](https://www.spotify.com/us/)** (Premium)
-      * [Mopidy-GMusic](https://docs.mopidy.com/en/latest/ext/backends/#mopidy-gmusic) for **[Google Play Music](https://play.google.com/music/listen)**
-      * [Mopidy-SoundClound](https://docs.mopidy.com/en/latest/ext/backends/#mopidy-soundcloud) for **[SoundCloud](https://soundcloud.com/stream)**
-      * [Mopidy-Pandora](https://github.com/rectalogic/mopidy-pandora) for **[Pandora](https://www.pandora.com/)**
-      * [Mopidy-YouTube](https://docs.mopidy.com/en/latest/ext/backends/#mopidy-youtube) for **[YouTube](https://www.youtube.com)**
-  * With [Mopidy-Moped](https://docs.mopidy.com/en/latest/ext/web/#mopidy-moped) web extension.
+  * Follows [official pypi installation](https://docs.mopidy.com/en/latest/installation/pypi/) on top of [Debian Buster](https://registry.hub.docker.com/_/debian/). Note: The official debian installation did not work (yet). Therfore installed mopidy3 from Python sources.
+  * With the following extensions installed:
+      * [Mopidy-Local](https://mopidy.com/ext/local/)
+      * [Mopidy-Mobile](https://mopidy.com/ext/mobile/)
+      * [Mopidy-Party](https://mopidy.com/ext/party/)
+      * [Mopidy-MPD](https://mopidy.com/ext/mpd/)
+      * [Mopidy-ALSAMixer](https://mopidy.com/ext/alsamixer/)
+      * [Mopidy-MusicBox-Webclient](https://mopidy.com/ext/musicbox-webclient/)
   * Can run as any user and runs as UID/GID `84044` user inside the container by default (for security reasons).
 
-You may install additional [backend extensions](https://docs.mopidy.com/en/latest/ext/backends/).
+
+  * The following extensions could be installed by extending this docker image:
+      * [Mopidy-Spotify](https://mopidy.com/ext/spotify/) for **[Spotify](https://www.spotify.com/us/)** (Premium)
+      * [Mopidy-GMusic](https://mopidy.com/ext/gmusic/) for **[Google Play Music](https://play.google.com/music/listen)**
+      * [Mopidy-SoundClound](https://mopidy.com/ext/soundcloud/) for **[SoundCloud](https://soundcloud.com/stream)**
+      * other [Mopidy extensions](https://mopidy.com/ext/) supporting Mopidy3/Python3
+  * The following extension could not be installed (yet), even if it is marked as Mopidy3/Python3 approved.
+      * [Mopidy-Iris](https://mopidy.com/ext/iris/)
 
 
 Usage
@@ -36,7 +52,7 @@ Simplest is by adding docker argument: `--device /dev/snd`. Try via:
 
     $ docker run --rm \
         --user root --device /dev/snd \
-        wernight/mopidy \
+        m4rc77/mopidy3-docker \
         gst-launch-1.0 audiotestsrc ! audioresample ! autoaudiosink
 
 #### PulseAudio native
@@ -46,7 +62,7 @@ Based on https://github.com/TheBiggerGuy/docker-pulseaudio-example.
 
     $ docker run --rm \
         --user $UID:$GID -v /run/user/$UID/pulse:/run/user/105/pulse \
-        wernight/mopidy \
+        m4rc77/mopidy3-docker \
         gst-launch-1.0 audiotestsrc ! audioresample ! autoaudiosink
 
 #### PulseAudio over network
@@ -82,7 +98,7 @@ Example to check it works:
     $ docker run --rm \
         -e "PULSE_SERVER=tcp:$(hostname -i):4713" \
         -e "PULSE_COOKIE_DATA=$(pax11publish -d | grep --color=never -Po '(?<=^Cookie: ).*')" \
-        wernight/mopidy \
+        m4rc77/mopidy3-docker \
         gst-launch-1.0 audiotestsrc ! audioresample ! autoaudiosink
 
 ### General usage
@@ -93,7 +109,7 @@ Example to check it works:
         -v "$PWD/local:/var/lib/mopidy/local" \
         -p 6600:6600 -p 6680:6680 \
         --user $UID:$GID \
-        wernight/mopidy \
+        m4rc77/mopidy3-docker \
         mopidy \
         -o spotify/username=USERNAME -o spotify/password=PASSWORD \
         -o gmusic/username=USERNAME -o gmusic/password=PASSWORD \
@@ -160,7 +176,7 @@ Then run it:
         -v "$PWD/mopidy.conf:/config/mopidy.conf" \
         -p 6600:6600 -p 6680:6680 \
         --user $UID:$GID \
-        wernight/mopidy
+        m4rc77/mopidy3-docker
 
 
 ##### Example using HTTP client to stream local files
@@ -173,7 +189,7 @@ Then run it:
             -v "$PWD/media:/var/lib/mopidy/media:ro" \
             -v "$PWD/local:/var/lib/mopidy/local" \
             -p 6680:6680 \
-            wernight/mopidy mopidy local scan
+            m4rc77/mopidy3-docker mopidy local scan
 
  3. Start the server:
 
@@ -183,7 +199,7 @@ Then run it:
             -v "$PWD/media:/var/lib/mopidy/media:ro" \
             -v "$PWD/local:/var/lib/mopidy/local" \
             -p 6680:6680 \
-            wernight/mopidy
+            m4rc77/mopidy3-docker
 
  4. Browse to http://localhost:6680/
 
@@ -191,7 +207,7 @@ Then run it:
 
     $ docker run --name mopidy -d \
         -v /run/user/$UID/pulse:/run/user/105/pulse \
-        wernight/mopidy
+        m4rc77/mopidy3-docker
     $ docker run --rm -it --net container:mopidy wernight/ncmpcpp ncmpcpp
 
 Alternatively if you don't need visualizers you can do:
@@ -201,7 +217,7 @@ Alternatively if you don't need visualizers you can do:
 
 ### Feedbacks
 
-Having more issues? [Report a bug on GitHub](https://github.com/wernight/docker-mopidy/issues). Also if you need some additional extensions/plugins that aren't already installed (please explain why).
+Having more issues? [Report a bug on GitHub](https://github.com/m4rc77/mopidy3-docker/issues). Also if you need some additional extensions/plugins that aren't already installed (please explain why).
 
 
 ### Alsa Audio
