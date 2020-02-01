@@ -22,11 +22,9 @@ RUN set -ex \
         python3-pip \
         python3-dev \
         python3-crypto \
-        build-essential \
         python3-gst-1.0 \
+        build-essential \
         libgstreamer1.0-0 \
-        gir1.2-gstreamer-1.0 \
-        gir1.2-gst-plugins-base-1.0 \
         gstreamer1.0-plugins-good \
         gstreamer1.0-plugins-ugly \
         gstreamer1.0-plugins-bad \
@@ -51,6 +49,7 @@ RUN set -ex \
         gcc \
         wget \
         build-essential \
+        python3-dev \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* ~/.cache
 
