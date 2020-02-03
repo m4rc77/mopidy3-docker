@@ -41,6 +41,7 @@ RUN set -ex \
         Mopidy-MPD \
         Mopidy-ALSAMixer \
         Mopidy-MusicBox-Webclient \
+        Mopidy-Iris \
  && mkdir -p /var/lib/mopidy/.config \
  && ln -s /config /var/lib/mopidy/.config/mopidy \
     # Clean-up
