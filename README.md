@@ -22,6 +22,7 @@ Features of this image
       * [Mopidy-Local](https://mopidy.com/ext/local/)
       * [Mopidy-Mobile](https://mopidy.com/ext/mobile/)
       * [Mopidy-Party](https://mopidy.com/ext/party/)
+      * [Mopidy-Iris](https://mopidy.com/ext/iris/)
       * [Mopidy-MPD](https://mopidy.com/ext/mpd/)
       * [Mopidy-ALSAMixer](https://mopidy.com/ext/alsamixer/)
       * [Mopidy-MusicBox-Webclient](https://mopidy.com/ext/musicbox-webclient/)
@@ -33,9 +34,7 @@ Features of this image
       * [Mopidy-GMusic](https://mopidy.com/ext/gmusic/) for **[Google Play Music](https://play.google.com/music/listen)**
       * [Mopidy-SoundClound](https://mopidy.com/ext/soundcloud/) for **[SoundCloud](https://soundcloud.com/stream)**
       * other [Mopidy extensions](https://mopidy.com/ext/) supporting Mopidy3/Python3
-  * The following extension could not be installed (yet), even if it is marked as Mopidy3/Python3 approved.
-      * [Mopidy-Iris](https://mopidy.com/ext/iris/)
-
+     
 
 Usage
 -----

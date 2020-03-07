@@ -38,6 +38,7 @@ RUN set -ex \
         Mopidy-Local \
         Mopidy-Mobile \
         Mopidy-Party \
+        Mopidy-Iris \
         Mopidy-MPD \
         Mopidy-ALSAMixer \
         Mopidy-MusicBox-Webclient \
