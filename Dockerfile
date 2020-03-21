@@ -29,6 +29,8 @@ RUN set -ex \
         gstreamer1.0-plugins-ugly \
         gstreamer1.0-plugins-bad \
         gstreamer1.0-tools \
+        gstreamer1.0-pulseaudio \
+        gstreamer1.0-libav \
         gstreamer1.0-alsa \
  && wget -q -O - https://apt.mopidy.com/mopidy.gpg | apt-key add - \
  && wget -q -O /etc/apt/sources.list.d/mopidy.list https://apt.mopidy.com/buster.list \
