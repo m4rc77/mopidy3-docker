@@ -5,11 +5,6 @@ FROM debian:buster-slim
 # but failed ... because apt repo was not (yet) up to date and 
 # therefore switched over to PyPi installation.
 # (see https://docs.mopidy.com/en/latest/installation/pypi/).
-#
-#
-# Hint: Mopidy-Iris # Fails with at startup with 
-#       'Failed to load extension iris: No module named 'handlers' [7:MainThread:mopidy.ext]'
-#       therfore it was not installed.
 
 RUN set -ex \
  && apt-get update \
