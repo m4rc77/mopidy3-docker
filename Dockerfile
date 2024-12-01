@@ -1,4 +1,4 @@
-FROM debian:buster-slim
+FROM debian:bookworm-slim
 
 # Started from official Mopidy3 install for Debian/Ubuntu ..
 # (see https://docs.mopidy.com/en/latest/installation/debian/ )
@@ -10,28 +10,27 @@ RUN set -ex \
  && apt-get update \
  && apt-get upgrade -y \
  && DEBIAN_FRONTEND=noninteractive apt-get install -y \
-        wget \
-        gnupg2 \
-        dumb-init \
-        python3 \
-        python3-pip \
-        python3-dev \
-        python3-crypto \
-        python3-gst-1.0 \
         build-essential \
-        libgstreamer1.0-0 \
+        dumb-init \
+        gir1.2-gst-plugins-base-1.0 \
+        gir1.2-gstreamer-1.0 \
+        gstreamer1.0-alsa \
+#       gstreamer1.0-libav \
+        gstreamer1.0-plugins-bad \
         gstreamer1.0-plugins-good \
         gstreamer1.0-plugins-ugly \
-        gstreamer1.0-plugins-bad \
+#       gstreamer1.0-pulseaudio \
         gstreamer1.0-tools \
-        gstreamer1.0-pulseaudio \
-        gstreamer1.0-libav \
-        gstreamer1.0-alsa \
- && wget -q -O - https://apt.mopidy.com/mopidy.gpg | apt-key add - \
- && wget -q -O /etc/apt/sources.list.d/mopidy.list https://apt.mopidy.com/buster.list \
- && apt-get update \
- && DEBIAN_FRONTEND=noninteractive apt-get install -y libasound2-dev libspotify-dev \
- && python3 -m pip install --upgrade mopidy \
+        libcairo2-dev \
+        libasound2-dev \
+#       libgstreamer1.0-0 \
+        libgirepository1.0-dev \
+        python3 \
+        python3-dev \
+        python3-gst-1.0\
+        python3-pip \
+ && python3 -m pip install --upgrade --break-system-packages \
+        mopidy \
         Mopidy-Local \
         Mopidy-Mobile \
         Mopidy-Party \
@@ -45,7 +44,6 @@ RUN set -ex \
  && apt-get purge --auto-remove -y \
         curl \
         gcc \
-        wget \
         build-essential \
         python3-dev \
  && apt-get clean \
